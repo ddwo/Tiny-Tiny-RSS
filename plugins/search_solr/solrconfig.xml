@@ -800,6 +800,7 @@
   <requestHandler name="/dataimport" class="solr.DataImportHandler">
     <lst name="defaults">
       <str name="config">db-data-config.xml</str>
+      <str name="update.chain">langid</str>
     </lst>
   </requestHandler>
 
@@ -819,7 +820,7 @@
      <lst name="defaults">
        <str name="echoParams">explicit</str>
        <int name="rows">10</int>
-       <str name="df">text</str>
+       <str name="df">content_txt</str>
      </lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
@@ -881,7 +882,7 @@
        <str name="echoParams">explicit</str>
        <str name="wt">json</str>
        <str name="indent">true</str>
-       <str name="df">text</str>
+       <str name="df">content_txt</str>
      </lst>
   </requestHandler>
 
@@ -938,7 +939,7 @@
 
   <initParams path="/update/**,/query,/select,/tvrh,/elevate,/spell,/browse">
     <lst name="defaults">
-      <str name="df">text</str>
+      <str name="df">content_txt</str>
     </lst>
   </initParams>
 
@@ -1056,8 +1057,9 @@
        Admin Handlers - This will register all the standard admin
        RequestHandlers.  
     -->
-  <requestHandler name="/admin/" 
-                  class="solr.admin.AdminHandlers" />
+  <!-- <requestHandler name="/admin/"  -->
+  <!--                 class="solr.admin.AdminHandlers" />- -->
+  
   <!-- This single handler is equivalent to the following... -->
   <!--
      <requestHandler name="/admin/luke"       class="solr.admin.LukeRequestHandler" />
@@ -1216,7 +1218,7 @@
     <!-- a spellchecker built from a field of the main index -->
     <lst name="spellchecker">
       <str name="name">default</str>
-      <str name="field">text</str>
+      <str name="field">content_txt</str>
       <str name="classname">solr.DirectSolrSpellChecker</str>
       <!-- the spellcheck distance measure used, the default is the internal levenshtein -->
       <str name="distanceMeasure">internal</str>
@@ -1301,7 +1303,7 @@
     -->
   <requestHandler name="/spell" class="solr.SearchHandler" startup="lazy">
     <lst name="defaults">
-      <str name="df">text</str>
+      <str name="df">content_txt</str>
       <!-- Solr will use suggestions from both the 'default' spellchecker
            and from the 'wordbreak' spellchecker and combine them.
            collations (re-written queries) can include a combination of
@@ -1358,7 +1360,7 @@
     -->
   <requestHandler name="/tvrh" class="solr.SearchHandler" startup="lazy">
     <lst name="defaults">
-      <str name="df">text</str>
+      <str name="df">content_txt</str>
       <bool name="tv">true</bool>
     </lst>
     <arr name="last-components">
@@ -1454,7 +1456,7 @@
       <!-- Configure the remaining request handler parameters. -->
       <str name="defType">edismax</str>
       <str name="qf">
-        text^0.5 features^1.0 name^1.2 sku^1.5 id^10.0 manu^1.1 cat^1.4
+        content_txt^0.5 features^1.0 name^1.2 sku^1.5 id^10.0 manu^1.1 cat^1.4
       </str>
       <str name="q.alt">*:*</str>
       <str name="rows">10</str>
@@ -1504,7 +1506,7 @@
   <requestHandler name="/elevate" class="solr.SearchHandler" startup="lazy">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="df">text</str>
+      <str name="df">content_txt</str>
     </lst>
     <arr name="last-components">
       <str>elevator</str>
@@ -1659,17 +1661,34 @@
        rich documents injected via ExtractingRequestHandler.
        See more about langId at http://wiki.apache.org/solr/LanguageDetection
     -->
-    <!--
+
+  <!-- tika one
      <updateRequestProcessorChain name="langid">
        <processor class="org.apache.solr.update.processor.TikaLanguageIdentifierUpdateProcessorFactory">
-         <str name="langid.fl">text,title,subject,description</str>
+         <str name="langid.fl">content,title</str>
          <str name="langid.langField">language_s</str>
          <str name="langid.fallback">en</str>
        </processor>
        <processor class="solr.LogUpdateProcessorFactory" />
        <processor class="solr.RunUpdateProcessorFactory" />
      </updateRequestProcessorChain>
-    -->
+  -->
+  <updateRequestProcessorChain name="langid">
+    <processor class="org.apache.solr.update.processor.LangDetectLanguageIdentifierUpdateProcessorFactory">
+      <lst name="defaults">
+        <str name="langid.fl">title_txt,content_txt,feed_title</str>
+        <str name="langid.langField">lang_s</str>
+        <str name="langid.fallback">en</str>
+	<str name="langid.threshold">0.8</str>
+	<str name="langid.map">true</str>
+	<str name="langid.map.fl">title_txt,content_txt</str>
+	<str name="langid.whitelist">da,de,en,es,fi,fr,hu,id,it,ja,lv,nl,no,pt,ro,sv,tr</str>
+      </lst>
+    </processor>
+    <processor class="solr.LogUpdateProcessorFactory" />
+    <processor class="solr.RunUpdateProcessorFactory" />
+  </updateRequestProcessorChain>
+
 
   <!-- Script update processor
 
