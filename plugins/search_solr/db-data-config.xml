@@ -1,0 +1,70 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource"
+	      driver="org.postgresql.Driver"
+	      url="jdbc:postgresql://localhost/DATABASE_NAME"
+	      user="USERNAME"
+	      password="PASSWORD"
+	      readOnly="true"
+	      autoCommit="false" />
+  <document>
+    <entity name="pgsql_db" transformer="HTMLStripTransformer"
+	    query="SELECT
+		   int_id              AS id,
+		   date_entered,
+		   date_updated,
+		   ttrss_entries.title AS title,
+		   link,
+		   content,
+		   ttrss_feeds.title   AS feed_title,
+		   site_url,
+		   marked,
+		   score,
+		   published,
+		   unread,
+		   note,
+		   author,
+		   ttrss_feeds.owner_uid,
+		   ttrss_feed_categories.title AS feed_category
+		   FROM ttrss_users
+		   INNER JOIN ttrss_feeds ON ttrss_users.id = ttrss_feeds.owner_uid
+		   LEFT OUTER JOIN ttrss_feed_categories ON ttrss_feed_categories.id = ttrss_feeds.cat_id
+		   ,
+		   ttrss_entries, ttrss_user_entries
+		   WHERE ref_id = ttrss_entries.id AND feed_id = ttrss_feeds.id"
+	    deltaImportQuery="SELECT
+			      int_id              AS id,
+			      date_entered,
+			      date_updated,
+			      ttrss_entries.title AS title,
+			      link,
+			      content,
+			      ttrss_feeds.title   AS feed_title,
+			      site_url,
+			      marked,
+			      score,
+			      published,
+			      unread,
+			      note,
+			      author,
+			      ttrss_feeds.owner_uid,
+			      ttrss_feed_categories.title AS feed_category
+			      FROM ttrss_users
+			      INNER JOIN ttrss_feeds ON ttrss_users.id = ttrss_feeds.owner_uid
+			      LEFT OUTER JOIN ttrss_feed_categories ON ttrss_feed_categories.id = ttrss_feeds.cat_id
+			      ,
+			      ttrss_entries, ttrss_user_entries
+			      WHERE ref_id = ttrss_entries.id AND feed_id = ttrss_feeds.id
+			      AND int_id = '${dih.delta.id}'"
+	    deltaQuery="SELECT
+			int_id              AS id
+			FROM ttrss_users
+			INNER JOIN ttrss_feeds ON ttrss_users.id = ttrss_feeds.owner_uid
+			LEFT OUTER JOIN ttrss_feed_categories ON ttrss_feed_categories.id = ttrss_feeds.cat_id
+			,
+			ttrss_entries, ttrss_user_entries
+			WHERE ref_id = ttrss_entries.id AND feed_id = ttrss_feeds.id
+			AND date_updated &gt; timestamp '${dih.last_index_time}'">
+      <field column="content" stripHTML="true" />
+    </entity>
+  </document>
+</dataConfig>
