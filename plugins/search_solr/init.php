@@ -10,10 +10,6 @@ class Search_Solr extends Plugin {
 
 	function init($host) {
 		$host->add_hook($host::HOOK_SEARCH, $this);
-
-		if (class_exists("SolrClient")) {
-			user_error("Your PHP has a separate systemwide Solr client installed which conflicts with the client library used by tt-rss. Either remove the system library or disable Solr support.");
-		}
 	}
 
     function hook_search($search) {
