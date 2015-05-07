@@ -12,9 +12,9 @@
 		   int_id              AS id,
 		   date_entered,
 		   date_updated,
-		   ttrss_entries.title AS title,
+		   ttrss_entries.title AS title_txt,
 		   link,
-		   content,
+		   content             AS content_txt,
 		   ttrss_feeds.title   AS feed_title,
 		   site_url,
 		   marked,
@@ -35,9 +35,9 @@
 			      int_id              AS id,
 			      date_entered,
 			      date_updated,
-			      ttrss_entries.title AS title,
+			      ttrss_entries.title AS title_txt,
 			      link,
-			      content,
+			      content             AS content_txt,
 			      ttrss_feeds.title   AS feed_title,
 			      site_url,
 			      marked,
@@ -64,7 +64,7 @@
 			ttrss_entries, ttrss_user_entries
 			WHERE ref_id = ttrss_entries.id AND feed_id = ttrss_feeds.id
 			AND date_updated &gt; timestamp '${dih.last_index_time}'">
-      <field column="content" stripHTML="true" />
+      <field column="content_txt" stripHTML="true" />
     </entity>
   </document>
 </dataConfig>
