@@ -13,13 +13,12 @@ This is a fork of Tiny Tiny RSS with support for Solr, a search platform.
 1. Extract the Solr distribution somewhere
 2. Navigate to the root directory and start solr with 'bin/solr start'
 3. Create the Solr core to hold your tt-rss index with 'bin/solr create -e ttrss'
-4. Copy the solrconfig.xml file from $SOLR_ROOT/example/example-DIH/solr/db/conf/solrconfig.xml to $SOLR_ROOT/server/solr/ttrss/conf/solrconfig.xml
-5. Copy the provided schema.xml and db-data-config.xml files into that same conf directory
-6. Edit the db-data-config.xml file with your SQL server details
-7. Extract postgresql JDBC driver to the core lib directory ($SOLR_ROOT/server/solr/ttrss/lib, you will have to create this directory)
-8. Reload the core from the admin page
-9. Add "search_solr" to the list of plugins enabled in config.php in your TT-RSS installation.
-10. Add the following (or something similar) to the Solr user's crontab:
+4. Copy the provided schema.xml, solrconfig.xml, and db-data-config.xml files into the $SOLR_ROOT/server/solr/ttrss/conf/ directory
+5. Edit the db-data-config.xml file with your SQL server details
+6. Extract postgresql JDBC driver to the core lib directory ($SOLR_ROOT/server/solr/ttrss/lib, you will have to create this directory)
+7. Reload the core from the admin page
+8. Add "search_solr" to the list of plugins enabled in config.php in your TT-RSS installation.
+9. Add the following (or something similar) to the Solr user's crontab:
 ```
      0  0  *  *  * curl -I "localhost:8983/solr/ttrss/dataimport?command=full-import" >/dev/null
      0  */2 * *  * curl -I "localhost:8983/solr/ttrss/dataimport?command=delta-import&clean=false" >/dev/null
