@@ -120,7 +120,7 @@
     <field name="_version_" type="long" indexed="true" stored="true"/>
 
     <!-- TT-RSS title -->
-    <field name="title" type="text_general" indexed="true" stored="true" />
+    <field name="title_txt" type="text_general" indexed="true" stored="true" />
     <!-- feed title -->
     <field name="feed_title" type="text_general" indexed="true" stored="true" />
     <!-- feed categories -->
@@ -150,7 +150,7 @@
     <!-- TT-RSS score -->
     <field name="score" type="int" indexed="true" stored="true" />
     <!-- TT-RSS main feed body -->
-    <field name="content" type="text_general" indexed="true" stored="true" />
+    <field name="content_txt" type="text_general" indexed="true" stored="true" />
 
     
 
