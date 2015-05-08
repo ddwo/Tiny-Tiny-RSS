@@ -821,6 +821,7 @@
        <str name="echoParams">explicit</str>
        <int name="rows">10</int>
        <str name="df">content_txt</str>
+       <str name="defType">edismax</str>
      </lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
@@ -834,12 +835,22 @@
          NOTE: there is *absolutely* nothing a client can do to prevent these
          "appends" values from being used, so don't use this mechanism
          unless you are sure you always want it.
-      -->
-    <!--
-       <lst name="appends">
-         <str name="fq">inStock:true</str>
-       </lst>
-      -->
+    -->
+    <lst name="appends">
+      <str name="f.title.qf">
+	 title_txt_da title_txt_de title_txt_en title_txt_es
+	 title_txt_fi title_txt_fr title_txt_hu title_txt_id
+	 title_txt_it title_txt_ja title_txt_nl title_txt_no
+	 title_txt_pt title_txt_ro title_txt_sv title_txt_tr
+       </str>
+       <str name="f.content.qf">
+	 content_txt_da content_txt_de content_txt_en content_txt_es
+	 content_txt_fi content_txt_fr content_txt_hu content_txt_id
+	 content_txt_it content_txt_ja content_txt_nl content_txt_no
+	 content_txt_pt content_txt_ro content_txt_sv content_txt_tr
+       </str>
+    </lst>
+
     <!-- "invariants" are a way of letting the Solr maintainer lock down
          the options available to Solr clients.  Any params values
          specified here are used regardless of what values may be specified
