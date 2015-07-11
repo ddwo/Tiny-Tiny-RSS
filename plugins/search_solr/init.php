@@ -21,6 +21,7 @@ class Search_Solr extends Plugin {
         $solrClient = new SolrClient($solrOptions);
 
         $dismaxQuery = new SolrDisMaxQuery($search);
+        $dismaxQuery->useEDisMaxQueryParser();
         $dismaxQuery->addFilterQuery("owner_uid:{$_SESSION['uid']}");
         $dismaxQuery->addField("id");
         
@@ -28,6 +29,7 @@ class Search_Solr extends Plugin {
             ->addQueryField("title", 2)
             ->addQueryField("content",1.5)
             ->addQueryField("feed_title",1.5);
+        $dismaxQuery->setRows(9999);
 
         $solrResult = $solrClient->query($dismaxQuery);
         $ids = array();
