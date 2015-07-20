@@ -27,7 +27,7 @@ class Search_Solr extends Plugin {
         
         $dismaxQuery
             ->addQueryField("title", 2)
-            ->addQueryField("content",1.5)
+            ->addQueryField("content", .5)
             ->addQueryField("feed_title",1.5);
         $dismaxQuery->setRows(9999);
 
